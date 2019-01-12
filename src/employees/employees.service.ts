@@ -11,30 +11,38 @@ export class EmployeesService {
     @Inject(EMPLOYEE_MODEL_PROVIDER) private employeeModel: Model<Employee>,
   ) {}
 
-  async create(createEmplDto: CreateEmployeeDto): Promise<Employee> {
+  async create(createEmplDto: CreateEmployeeDto) {
     const createdEmployee = new this.employeeModel(createEmplDto);
-    return await createdEmployee.save();
+    await createdEmployee.save();
+  }
+
+  async update(id: string, updatedEmployee: CreateEmployeeDto) {
+    await this.employeeModel.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: updatedEmployee.name,
+          position: updatedEmployee.position,
+          office: updatedEmployee.office,
+          salary: updatedEmployee.salary,
+        },
+      },
+    );
+  }
+
+  async remove(id: string) {
+    await this.employeeModel.deleteOne({ _id : id });
   }
 
   async findAll(): Promise<Employee[]> {
     return await this.employeeModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Employee> {
+  // This method find one employee
+  /* async findOne(id: string): Promise<Employee> {
     let employeeSelected: Employee;
     employeeSelected = await this.employeeModel.findById(id).exec();
     return employeeSelected;
-  }
-
-  async update(id: string, updateEmployeeDto: CreateEmployeeDto): Promise<Employee> {
-    let updatedEmployee: Employee;
-    updatedEmployee = await this.employeeModel.findOneAndUpdate(id, updateEmployeeDto);
-    return updatedEmployee;
-  }
-
-  async remove(id: string) {
-    await this.employeeModel.findOneAndRemove(id);
-    return { deleted: true };
-  }
+  } */
 
 }

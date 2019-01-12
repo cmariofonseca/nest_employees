@@ -9,28 +9,31 @@ export class EmployeesController {
   constructor(private employeeSvc: EmployeesService) {}
 
   @Post()
-  async create(@Body() createEmplDto: CreateEmployeeDto) {
-    return this.employeeSvc.create(createEmplDto);
-  }
-
-  @Get()
-  async findAll(): Promise<Employee[]> {
-    return this.employeeSvc.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.employeeSvc.findOne(id);
+  create(@Body() createEmplDto: CreateEmployeeDto) {
+    this.employeeSvc.create(createEmplDto);
+    return { status: 'employee created' };
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: CreateEmployeeDto) {
-    return this.employeeSvc.update(id, updateEmployeeDto);
+  update(@Param('id') id: string, @Body() updatedEmployee: CreateEmployeeDto) {
+    this.employeeSvc.update(id, updatedEmployee);
+    return { status: 'employee updated' };
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.employeeSvc.remove(id);
+    this.employeeSvc.remove(id);
+    return { status: 'employee deleted' };
   }
+
+  @Get()
+  async findAll(): Promise<Employee[]> {
+    return await this.employeeSvc.findAll();
+  }
+
+  /* @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.employeeSvc.findOne(id);
+  }*/
 
 }
